@@ -5,8 +5,8 @@ import { authRepository } from "@/modules/auth/auth.repository";
 import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { useCallback, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { RiDeleteBinFill } from "react-icons/ri";
-import { FiPlus } from "react-icons/fi";
+import { IoIosClose } from "react-icons/io";
+import { IoIosAdd } from "react-icons/io";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,17 +63,17 @@ export default function Home() {
                 <Checkbox className="bg-white" />
                 <span className="pl-4 text-lg">洗濯物をする</span>
               </div>
-              <RiDeleteBinFill className="text-2xl cursor-pointer" />
+              <IoIosClose className="text-3xl cursor-pointer" />
             </div>
             <div className="flex items-center justify-between bg-gray-100 h-12 px-4 mx-auto rounded">
               <div>
                 <Checkbox className="bg-white" />
                 <span className="pl-4 text-lg">買い物にいく</span>
               </div>
-              <RiDeleteBinFill className="text-2xl cursor-pointer" />
+              <IoIosClose className="text-3xl cursor-pointer" />
             </div>
             <div className="flex items-center justify-center px-3 h-12">
-              <FiPlus className="text-3xl text-gray-300 cursor-pointer" />
+              <IoIosAdd className="text-4xl text-gray-300 cursor-pointer" />
             </div>
           </div>
         </CardContent>
