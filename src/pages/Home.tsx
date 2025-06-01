@@ -5,20 +5,25 @@ import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
-import AllTodoList from "@/components/todos/AllTodoList";
-import IncompleteTodos from "@/components/todos/IncompleteTodoList";
-import CompleteTodos from "@/components/todos/CompleteTodoList";
-import TodoSwitchButton from "@/components/todos/TodoSwitchButton";
+import AllTodoList from "@/components/todo/AllTodoList";
+import IncompleteTodos from "@/components/todo/IncompleteTodoList";
+import CompleteTodos from "@/components/todo/CompleteTodoList";
+import TodoSwitchButton from "@/components/todo/TodoSwitchButton";
 import { Input } from "@/components/ui/input";
+import { todoRepository } from "@/modules/todo/todo.repository";
+import { useTodoStore } from "@/modules/todo/todo.store";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
   const currentUserName = currentUserStore.currentUser?.user_metadata.name;
+  const userId = currentUserStore.currentUser?.id;
+  const todoStore = useTodoStore();
   const [isLoading, setIsLoading] = useState(true);
   const [isAllTodoList, setIsAllTodoList] = useState(true);
   const [isCompleteTodoList, setIsCompleteTodoList] = useState(false);
   const [isIncompleteTodoList, setIsIncompleteTodoList] = useState(false);
   const [isShowTodoInput, setIsShowTodoInput] = useState(false);
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -28,6 +33,13 @@ export default function Home() {
     };
     fetchCurrentUser();
   }, [currentUserStore]);
+
+  const createTodo = async () => {
+    if (!userId) return;
+    const newTodo = await todoRepository.create(userId, content);
+    todoStore.set(newTodo);
+    setIsShowTodoInput(false);
+  };
 
   const signout = async () => {
     await authRepository.signout();
@@ -60,7 +72,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg mx-auto h-120">
+      <Card className="w-full max-w-lg mx-auto">
         <CardHeader>
           <div className="flex justify-between">
             <CardTitle className="font-bold text-3xl">ToDo App</CardTitle>
@@ -96,20 +108,24 @@ export default function Home() {
           {isCompleteTodoList && <CompleteTodos />}
           {isAllTodoList && (
             <>
-              <div className="flex items-center justify-center h-12 my-3">
-                {!isShowTodoInput && (
+              {!isShowTodoInput && (
+                <div className="flex items-center justify-center my-4">
                   <IoIosAdd
                     className="text-4xl text-gray-300 cursor-pointer shadow"
                     onClick={() => setIsShowTodoInput(!isShowTodoInput)}
                   />
-                )}
-              </div>
+                </div>
+              )}
               {isShowTodoInput && (
-                <div className="flex items-center justify-between">
-                  <Input type="text" className="w-100" />
+                <div className="flex items-center justify-between my-4">
+                  <Input
+                    type="text"
+                    className="w-100"
+                    onChange={(e) => setContent(e.target.value)}
+                  />
                   <IoIosAdd
                     className="text-4xl text-gray-300 cursor-pointer shadow"
-                    onClick={() => setIsShowTodoInput(false)}
+                    onClick={createTodo}
                   />
                 </div>
               )}
