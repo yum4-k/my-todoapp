@@ -8,6 +8,8 @@ import { IoIosAdd } from "react-icons/io";
 import AllTodoList from "@/components/todos/AllTodoList";
 import IncompleteTodos from "@/components/todos/IncompleteTodoList";
 import CompleteTodos from "@/components/todos/CompleteTodoList";
+import TodoSwitchButton from "@/components/todos/TodoSwitchButton";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
@@ -16,6 +18,7 @@ export default function Home() {
   const [isAllTodoList, setIsAllTodoList] = useState(true);
   const [isCompleteTodoList, setIsCompleteTodoList] = useState(false);
   const [isIncompleteTodoList, setIsIncompleteTodoList] = useState(false);
+  const [isShowTodoInput, setIsShowTodoInput] = useState(false);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -67,51 +70,52 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-end gap-4 py-4">
-            <Button
-              className={`w-16 rounded-3xl px-4 py-2 transition-colors ${
-                isAllTodoList
-                  ? "bg-orange-500 hover:bg-orange-400 text-white"
-                  : "bg-white hover:bg-gray-100 text-black"
-              }`}
-              variant={isAllTodoList ? undefined : "outline"}
-              onClick={handleShowAllTodos}
-            >
-              全て
-            </Button>
-            <Button
-              className={`w-26 rounded-3xl px-4 py-2 transition-colors ${
-                isIncompleteTodoList
-                  ? "bg-orange-500 hover:bg-orange-400 text-white"
-                  : "bg-white hover:bg-gray-100 text-black"
-              }`}
-              variant={isIncompleteTodoList ? undefined : "outline"}
-              onClick={handleShowIncompleteTodos}
-            >
-              未完了のみ
-            </Button>
-            <Button
-              className={`w-22 rounded-3xl px-4 py-2 transition-colors ${
-                isCompleteTodoList
-                  ? "bg-orange-500 hover:bg-orange-400 text-white"
-                  : "bg-white hover:bg-gray-100 text-black"
-              }`}
-              variant={isCompleteTodoList ? undefined : "outline"}
-              onClick={handleShowCompleteTodos}
-            >
-              完了のみ
-            </Button>
+            <TodoSwitchButton
+              value="全て"
+              width="w-16"
+              isTodoList={isAllTodoList}
+              onClickShowTodos={handleShowAllTodos}
+            />
+            <TodoSwitchButton
+              value="未完了のみ"
+              width="w-26"
+              isTodoList={isIncompleteTodoList}
+              onClickShowTodos={handleShowIncompleteTodos}
+            />
+            <TodoSwitchButton
+              value="完了のみ"
+              width="w-22"
+              isTodoList={isCompleteTodoList}
+              onClickShowTodos={handleShowCompleteTodos}
+            />
           </div>
         </CardHeader>
         <CardContent>
           {isAllTodoList && <AllTodoList />}
           {isIncompleteTodoList && <IncompleteTodos />}
           {isCompleteTodoList && <CompleteTodos />}
+          {isAllTodoList && (
+            <>
+              <div className="flex items-center justify-center h-12 my-3">
+                {!isShowTodoInput && (
+                  <IoIosAdd
+                    className="text-4xl text-gray-300 cursor-pointer shadow"
+                    onClick={() => setIsShowTodoInput(!isShowTodoInput)}
+                  />
+                )}
+              </div>
+              {isShowTodoInput && (
+                <div className="flex items-center justify-between">
+                  <Input type="text" className="w-100" />
+                  <IoIosAdd
+                    className="text-4xl text-gray-300 cursor-pointer shadow"
+                    onClick={() => setIsShowTodoInput(false)}
+                  />
+                </div>
+              )}
+            </>
+          )}
         </CardContent>
-        {isAllTodoList && (
-          <div className="flex items-center justify-center px-3 h-12">
-            <IoIosAdd className="text-4xl text-gray-300 cursor-pointer shadow" />
-          </div>
-        )}
       </Card>
     </div>
   );
