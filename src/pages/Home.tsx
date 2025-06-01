@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { authRepository } from "@/modules/auth/auth.repository";
 import { useCurrentUserStore } from "@/modules/auth/auth.store";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { IoIosClose } from "react-icons/io";
 import { IoIosAdd } from "react-icons/io";
@@ -13,10 +13,13 @@ export default function Home() {
   const currentUserStore = useCurrentUserStore();
   const currentUserName = currentUserStore.currentUser?.user_metadata.name;
 
-  const setSession = useCallback(async () => {
-    const currentUser = await authRepository.getCurrentUser();
-    currentUserStore.set(currentUser);
-    setIsLoading(false);
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const currentUser = await authRepository.getCurrentUser();
+      currentUserStore.set(currentUser);
+      setIsLoading(false);
+    };
+    fetchCurrentUser();
   }, [currentUserStore]);
 
   const signout = async () => {
@@ -24,12 +27,9 @@ export default function Home() {
     currentUserStore.set(undefined);
   };
 
-  useEffect(() => {
-    setSession();
-  }, [setSession]);
-
-  if (currentUserStore.currentUser === undefined)
+  if (!isLoading && currentUserStore.currentUser === undefined) {
     return <Navigate replace to="/signin" />;
+  }
 
   if (isLoading) return <div />;
 

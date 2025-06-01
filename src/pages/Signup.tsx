@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -16,6 +16,16 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const currentUserStore = useCurrentUserStore();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const currentUser = await authRepository.getCurrentUser();
+      currentUserStore.set(currentUser);
+      setIsLoading(false);
+    };
+    fetchCurrentUser();
+  }, [currentUserStore]);
 
   const signup = async () => {
     try {
@@ -44,7 +54,10 @@ export default function Signup() {
     }
   };
 
-  if (currentUserStore.currentUser !== undefined) return <Navigate replace to="/" />;
+  if (currentUserStore.currentUser !== undefined)
+    return <Navigate replace to="/" />;
+
+  if (isLoading) return <div />;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
