@@ -1,17 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { authRepository } from "@/modules/auth/auth.repository";
-import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { IoIosAdd } from "react-icons/io";
-import AllTodoList from "@/components/todo/AllTodoList";
-import IncompleteTodos from "@/components/todo/IncompleteTodoList";
-import CompleteTodos from "@/components/todo/CompleteTodoList";
-import TodoSwitchButton from "@/components/todo/TodoSwitchButton";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { authRepository } from "@/modules/auth/auth.repository";
+import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { todoRepository } from "@/modules/todo/todo.repository";
 import type { Todo } from "@/types/todo";
+import AllTodoList from "@/components/todo/TodoList";
+import TodoSwitchButton from "@/components/todo/TodoSwitchButton";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
@@ -24,6 +23,8 @@ export default function Home() {
   const [isShowTodoInput, setIsShowTodoInput] = useState(false);
   const [content, setContent] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
+  const incompleteTodos = todos.filter((todo) => todo.is_completed === false);
+  const completeTodos = todos.filter((todo) => todo.is_completed === true);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -124,33 +125,36 @@ export default function Home() {
           </div>
         </CardHeader>
         <CardContent>
-          {isAllTodoList && <AllTodoList todos={todos} onDelete={deleteTodo} />}
-          {isIncompleteTodoList && <IncompleteTodos />}
-          {isCompleteTodoList && <CompleteTodos />}
-          {isAllTodoList && (
-            <>
-              {!isShowTodoInput && (
-                <div className="flex items-center justify-center my-4">
-                  <IoIosAdd
-                    className="text-4xl text-gray-300 cursor-pointer shadow"
-                    onClick={() => setIsShowTodoInput(!isShowTodoInput)}
-                  />
-                </div>
-              )}
-              {isShowTodoInput && (
-                <div className="flex items-center justify-between my-4">
-                  <Input
-                    type="text"
-                    className="wx-auto"
-                    onChange={(e) => setContent(e.target.value)}
-                  />
-                  <IoIosAdd
-                    className="text-4xl text-gray-300 cursor-pointer shadow ml-4"
-                    onClick={createTodo}
-                  />
-                </div>
-              )}
-            </>
+          <AllTodoList
+            todos={
+              isAllTodoList
+                ? todos
+                : isIncompleteTodoList
+                ? incompleteTodos
+                : completeTodos
+            }
+            onDelete={deleteTodo}
+          />
+          {!isShowTodoInput && (
+            <div className="flex items-center justify-center my-4">
+              <IoIosAdd
+                className="text-4xl text-gray-300 cursor-pointer shadow"
+                onClick={() => setIsShowTodoInput(!isShowTodoInput)}
+              />
+            </div>
+          )}
+          {isShowTodoInput && (
+            <div className="flex items-center justify-between my-4">
+              <Input
+                type="text"
+                className="wx-auto"
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <IoIosAdd
+                className="text-4xl text-gray-300 cursor-pointer shadow ml-4"
+                onClick={createTodo}
+              />
+            </div>
           )}
         </CardContent>
       </Card>
