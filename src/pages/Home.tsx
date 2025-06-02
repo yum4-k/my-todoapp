@@ -11,19 +11,19 @@ import CompleteTodos from "@/components/todo/CompleteTodoList";
 import TodoSwitchButton from "@/components/todo/TodoSwitchButton";
 import { Input } from "@/components/ui/input";
 import { todoRepository } from "@/modules/todo/todo.repository";
-import { useTodoStore } from "@/modules/todo/todo.store";
+import type { Todo } from "@/types/todo";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
   const currentUserName = currentUserStore.currentUser?.user_metadata.name;
   const userId = currentUserStore.currentUser?.id;
-  const todoStore = useTodoStore();
   const [isLoading, setIsLoading] = useState(true);
   const [isAllTodoList, setIsAllTodoList] = useState(true);
   const [isCompleteTodoList, setIsCompleteTodoList] = useState(false);
   const [isIncompleteTodoList, setIsIncompleteTodoList] = useState(false);
   const [isShowTodoInput, setIsShowTodoInput] = useState(false);
   const [content, setContent] = useState("");
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -34,10 +34,21 @@ export default function Home() {
     fetchCurrentUser();
   }, [currentUserStore]);
 
+  useEffect(() => {
+    const fecthAllTodos = async () => {
+      if (!userId) return;
+      const allTodos = await todoRepository.find(userId);
+      if (!allTodos) return;
+      setTodos(allTodos);
+      setIsLoading(false);
+    };
+    fecthAllTodos();
+  }, [userId]);
+
   const createTodo = async () => {
     if (!userId) return;
     const newTodo = await todoRepository.create(userId, content);
-    todoStore.set(newTodo);
+    setTodos((prevTodos) => [...prevTodos, newTodo]);
     setIsShowTodoInput(false);
   };
 
@@ -72,7 +83,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg mx-auto">
+      <Card className="w-full max-w-lg mx-auto my-auto">
         <CardHeader>
           <div className="flex justify-between">
             <CardTitle className="font-bold text-3xl">ToDo App</CardTitle>
@@ -103,7 +114,7 @@ export default function Home() {
           </div>
         </CardHeader>
         <CardContent>
-          {isAllTodoList && <AllTodoList />}
+          {isAllTodoList && <AllTodoList todos={todos} />}
           {isIncompleteTodoList && <IncompleteTodos />}
           {isCompleteTodoList && <CompleteTodos />}
           {isAllTodoList && (
