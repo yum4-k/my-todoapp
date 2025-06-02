@@ -47,9 +47,11 @@ export default function Home() {
 
   const createTodo = async () => {
     if (!userId) return;
+    if (content === "") return;
     const newTodo = await todoRepository.create(userId, content);
     setTodos((prevTodos) => [...prevTodos, newTodo]);
     setIsShowTodoInput(false);
+    setContent("");
   };
 
   const deleteTodo = async (id: number) => {
@@ -91,9 +93,12 @@ export default function Home() {
       <Card className="w-full max-w-lg mx-auto my-auto">
         <CardHeader>
           <div className="flex justify-between">
-            <CardTitle className="font-bold text-3xl">ToDo App</CardTitle>
+            <CardTitle className="font-bold text-3xl w-60">ToDo App</CardTitle>
             <div className="flex items-center justify-between gap-4">
-              <span>{currentUserName} さん</span>
+              <div className="flex items-center">
+                <span className="line-clamp-1">{currentUserName}</span>
+                <span className="whitespace-nowrap"> さん</span>
+              </div>
               <Button onClick={signout}>ログアウト</Button>
             </div>
           </div>
@@ -119,7 +124,7 @@ export default function Home() {
           </div>
         </CardHeader>
         <CardContent>
-          {isAllTodoList && <AllTodoList todos={todos} onDelete={deleteTodo}/>}
+          {isAllTodoList && <AllTodoList todos={todos} onDelete={deleteTodo} />}
           {isIncompleteTodoList && <IncompleteTodos />}
           {isCompleteTodoList && <CompleteTodos />}
           {isAllTodoList && (
@@ -136,11 +141,11 @@ export default function Home() {
                 <div className="flex items-center justify-between my-4">
                   <Input
                     type="text"
-                    className="w-100"
+                    className="wx-auto"
                     onChange={(e) => setContent(e.target.value)}
                   />
                   <IoIosAdd
-                    className="text-4xl text-gray-300 cursor-pointer shadow"
+                    className="text-4xl text-gray-300 cursor-pointer shadow ml-4"
                     onClick={createTodo}
                   />
                 </div>
