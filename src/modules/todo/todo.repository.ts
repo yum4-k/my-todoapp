@@ -24,4 +24,10 @@ export const todoRepository = {
     if (!data) return;
     return data;
   },
+
+  async delete(id: number) {
+    const { error } = await supabase.from("todos").delete().eq("id", id);
+    if (error) throw new Error(error.message);
+    return true;
+  },
 };

@@ -2,7 +2,12 @@ import { IoIosClose } from "react-icons/io";
 import { Checkbox } from "../ui/checkbox";
 import type { Todo } from "@/types/todo";
 
-export default function AllTodoList({ todos }: { todos: Todo[] }) {
+interface AllTodoListProps {
+  todos: Todo[];
+  onDelete: (id: number) => void;
+}
+
+export default function AllTodoList({ todos, onDelete }: AllTodoListProps) {
   return (
     <div className="space-y-4">
       {todos.map((todo) => (
@@ -14,7 +19,10 @@ export default function AllTodoList({ todos }: { todos: Todo[] }) {
             <Checkbox className="bg-white" />
             <span className="pl-4 text-lg">{todo.content}</span>
           </div>
-          <IoIosClose className="text-3xl cursor-pointer" />
+          <IoIosClose
+            className="text-3xl cursor-pointer"
+            onClick={() => onDelete(todo.id)}
+          />
         </div>
       ))}
     </div>

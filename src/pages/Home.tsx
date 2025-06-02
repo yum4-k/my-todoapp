@@ -52,6 +52,11 @@ export default function Home() {
     setIsShowTodoInput(false);
   };
 
+  const deleteTodo = async (id: number) => {
+    await todoRepository.delete(id);
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  };
+
   const signout = async () => {
     await authRepository.signout();
     currentUserStore.set(undefined);
@@ -114,7 +119,7 @@ export default function Home() {
           </div>
         </CardHeader>
         <CardContent>
-          {isAllTodoList && <AllTodoList todos={todos} />}
+          {isAllTodoList && <AllTodoList todos={todos} onDelete={deleteTodo}/>}
           {isIncompleteTodoList && <IncompleteTodos />}
           {isCompleteTodoList && <CompleteTodos />}
           {isAllTodoList && (
