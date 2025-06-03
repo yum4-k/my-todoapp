@@ -6,9 +6,17 @@ import { useState } from "react";
 interface AllTodoListProps {
   todos: Todo[];
   onDelete: (id: number) => void;
+  onUpdate: (
+    id: number,
+    todo: { content?: string; is_completed: boolean }
+  ) => void;
 }
 
-export default function AllTodoList({ todos, onDelete }: AllTodoListProps) {
+export default function AllTodoList({
+  todos,
+  onDelete,
+  onUpdate,
+}: AllTodoListProps) {
   const [contentWrapState, setContentWrapState] = useState<
     Record<number, boolean>
   >({});
@@ -19,6 +27,7 @@ export default function AllTodoList({ todos, onDelete }: AllTodoListProps) {
       [id]: !prevState[id],
     }));
   };
+
   return (
     <div className="space-y-4">
       {todos.map((todo) => (
@@ -27,7 +36,15 @@ export default function AllTodoList({ todos, onDelete }: AllTodoListProps) {
           className="flex items-center justify-between bg-gray-100 px-4 py-2 rounded shadow"
         >
           <div>
-            <Checkbox className="bg-white mr-4" />
+            <Checkbox
+              className="bg-white mr-4"
+              checked={todo.is_completed}
+              onCheckedChange={() => {
+                onUpdate(todo.id, {
+                  is_completed: !todo.is_completed,
+                });
+              }}
+            />
           </div>
           <div
             className={`flex-1 text-left ${

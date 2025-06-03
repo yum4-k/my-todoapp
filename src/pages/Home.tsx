@@ -55,6 +55,21 @@ export default function Home() {
     setContent("");
   };
 
+  const updateTodo = async (
+    id: number,
+    todo: { content?: string; is_completed: boolean }
+  ) => {
+    const updatedTodo = await todoRepository.update(id, todo);
+    setTodos((prevTodos) => {
+      const combieTodos = [...prevTodos, updatedTodo];
+      const uniqueTodos: { [key: number]: Todo } = {};
+      for (const todo of combieTodos) {
+        uniqueTodos[todo.id] = todo;
+      }
+      return Object.values(uniqueTodos);
+    });
+  };
+
   const deleteTodo = async (id: number) => {
     await todoRepository.delete(id);
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
@@ -134,6 +149,7 @@ export default function Home() {
                 : completeTodos
             }
             onDelete={deleteTodo}
+            onUpdate={updateTodo}
           />
           {!isShowTodoInput && (
             <div className="flex items-center justify-center my-4">

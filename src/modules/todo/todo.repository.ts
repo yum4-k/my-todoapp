@@ -25,6 +25,17 @@ export const todoRepository = {
     return data;
   },
 
+  async update(id: number, todo: { content?: string; is_completed: boolean }) {
+    const { data, error } = await supabase
+      .from("todos")
+      .update(todo)
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    return data;
+  },
+
   async delete(id: number) {
     const { error } = await supabase.from("todos").delete().eq("id", id);
     if (error) throw new Error(error.message);
