@@ -57,7 +57,7 @@ export default function Home() {
 
   const updateTodo = async (
     id: number,
-    todo: { content?: string; is_completed: boolean }
+    todo: { content?: string; is_completed?: boolean }
   ) => {
     const updatedTodo = await todoRepository.update(id, todo);
     setTodos((prevTodos) => {
@@ -109,7 +109,7 @@ export default function Home() {
       <Card className="w-full max-w-lg mx-auto my-auto">
         <CardHeader>
           <div className="flex justify-between">
-            <CardTitle className="font-bold text-3xl w-60">ToDo App</CardTitle>
+            <CardTitle className="font-bold text-3xl mr-auto">ToDo App</CardTitle>
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center">
                 <span className="line-clamp-1">{currentUserName}</span>

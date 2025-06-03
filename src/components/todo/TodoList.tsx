@@ -1,14 +1,16 @@
 import { IoIosClose } from "react-icons/io";
+import { BiSolidPencil } from "react-icons/bi";
 import { Checkbox } from "../ui/checkbox";
 import type { Todo } from "@/types/todo";
 import { useState } from "react";
+import { Input } from "../ui/input";
 
 interface AllTodoListProps {
   todos: Todo[];
   onDelete: (id: number) => void;
   onUpdate: (
     id: number,
-    todo: { content?: string; is_completed: boolean }
+    todo: { content?: string; is_completed?: boolean }
   ) => void;
 }
 
@@ -20,12 +22,26 @@ export default function AllTodoList({
   const [contentWrapState, setContentWrapState] = useState<
     Record<number, boolean>
   >({});
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState<string>("");
 
   const toggleContentWrap = (id: number) => {
     setContentWrapState((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
+  };
+
+  const handleEditStart = (id: number, content: string) => {
+    setEditingTodoId(id);
+    setEditedContent(content);
+  };
+
+  const handleEditEnd = (id: number) => {
+    if (editedContent.trim() !== "") {
+      onUpdate(id, { content: editedContent });
+    }
+    setEditingTodoId(null);
   };
 
   return (
@@ -52,11 +68,28 @@ export default function AllTodoList({
             }`}
             onClick={() => toggleContentWrap(todo.id)}
           >
-            <p className="text-lg">{todo.content}</p>
+            {editingTodoId === todo.id ? (
+              <Input
+                type="text"
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                onBlur={() => handleEditEnd(todo.id)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleEditEnd(todo.id);
+                }}
+                className="text-lg mr-4 border-none 
+                focus-visible:ring-muted shadow-none rounded-none"
+              />
+            ) : (
+              <p className="text-lg mr-4">{todo.content}</p>
+            )}
           </div>
-          <div>
+          <div className="flex items-center justify-between cursor-pointer gap-2">
+            <BiSolidPencil
+              onClick={() => handleEditStart(todo.id, todo.content)}
+            />
             <IoIosClose
-              className="text-3xl cursor-pointer"
+              className="text-3xl"
               onClick={() => onDelete(todo.id)}
             />
           </div>

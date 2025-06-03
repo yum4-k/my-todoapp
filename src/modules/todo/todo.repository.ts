@@ -25,7 +25,7 @@ export const todoRepository = {
     return data;
   },
 
-  async update(id: number, todo: { content?: string; is_completed: boolean }) {
+  async update(id: number, todo: { content?: string; is_completed?: boolean }) {
     const { data, error } = await supabase
       .from("todos")
       .update(todo)
