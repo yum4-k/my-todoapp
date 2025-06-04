@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { IoIosAdd } from "react-icons/io";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { authRepository } from "@/modules/auth/auth.repository";
 import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { todoRepository } from "@/modules/todo/todo.repository";
 import type { Todo } from "@/types/todo";
-import AllTodoList from "@/components/todo/TodoList";
-import TodoSwitchButton from "@/components/todo/TodoSwitchButton";
+import Header from "@/components/todo/Header";
+import TodoSwitch from "@/components/todo/TodoSwitch";
+import TodoList from "@/components/todo/TodoList";
+import TodoInput from "@/components/todo/TodoInput";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
@@ -108,39 +107,18 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <Card className="w-full max-w-lg mx-auto my-auto">
         <CardHeader>
-          <div className="flex justify-between">
-            <CardTitle className="font-bold text-3xl mr-auto">ToDo App</CardTitle>
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center">
-                <span className="line-clamp-1">{currentUserName}</span>
-                <span className="whitespace-nowrap"> さん</span>
-              </div>
-              <Button onClick={signout}>ログアウト</Button>
-            </div>
-          </div>
-          <div className="flex justify-end gap-4 py-4">
-            <TodoSwitchButton
-              value="全て"
-              width="w-16"
-              isTodoList={isAllTodoList}
-              onClickShowTodos={handleShowAllTodos}
-            />
-            <TodoSwitchButton
-              value="未完了のみ"
-              width="w-26"
-              isTodoList={isIncompleteTodoList}
-              onClickShowTodos={handleShowIncompleteTodos}
-            />
-            <TodoSwitchButton
-              value="完了のみ"
-              width="w-22"
-              isTodoList={isCompleteTodoList}
-              onClickShowTodos={handleShowCompleteTodos}
-            />
-          </div>
+          <Header currentUserName={currentUserName} onSignout={signout} />
+          <TodoSwitch
+            isAllTodoList={isAllTodoList}
+            isIncompleteTodoList={isIncompleteTodoList}
+            isCompleteTodoList={isCompleteTodoList}
+            onShowAllTodos={handleShowAllTodos}
+            onShowIncompleteTodos={handleShowIncompleteTodos}
+            onShowCompleteTodos={handleShowCompleteTodos}
+          />
         </CardHeader>
         <CardContent>
-          <AllTodoList
+          <TodoList
             todos={
               isAllTodoList
                 ? todos
@@ -151,27 +129,13 @@ export default function Home() {
             onDelete={deleteTodo}
             onUpdate={updateTodo}
           />
-          {!isShowTodoInput && (
-            <div className="flex items-center justify-center my-4">
-              <IoIosAdd
-                className="text-4xl text-gray-300 cursor-pointer shadow"
-                onClick={() => setIsShowTodoInput(!isShowTodoInput)}
-              />
-            </div>
-          )}
-          {isShowTodoInput && (
-            <div className="flex items-center justify-between my-4">
-              <Input
-                type="text"
-                className="wx-auto"
-                onChange={(e) => setContent(e.target.value)}
-              />
-              <IoIosAdd
-                className="text-4xl text-gray-300 cursor-pointer shadow ml-4"
-                onClick={createTodo}
-              />
-            </div>
-          )}
+          <TodoInput
+            isShowTodoInput={isShowTodoInput}
+            content={content}
+            setContent={setContent}
+            onCreateTodo={createTodo}
+            toggleInput={() => setIsShowTodoInput(!isShowTodoInput)}
+          />
         </CardContent>
       </Card>
     </div>

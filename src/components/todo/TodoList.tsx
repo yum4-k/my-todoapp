@@ -1,9 +1,10 @@
+import { useState } from "react";
+import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
 import { IoIosClose } from "react-icons/io";
 import { BiSolidPencil } from "react-icons/bi";
-import { Checkbox } from "../ui/checkbox";
+
 import type { Todo } from "@/types/todo";
-import { useState } from "react";
-import { Input } from "../ui/input";
 
 interface AllTodoListProps {
   todos: Todo[];
@@ -78,7 +79,7 @@ export default function AllTodoList({
                   if (e.key === "Enter") handleEditEnd(todo.id);
                 }}
                 className="text-lg mr-4 border-none 
-                focus-visible:ring-muted shadow-none rounded-none"
+                focus-visible:ring-muted shadow-none"
               />
             ) : (
               <p className="text-lg mr-4">{todo.content}</p>
