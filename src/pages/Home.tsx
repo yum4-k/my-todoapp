@@ -10,6 +10,7 @@ import Header from "@/components/todo/Header";
 import TodoSwitch from "@/components/todo/TodoSwitch";
 import TodoList from "@/components/todo/TodoList";
 import TodoInput from "@/components/todo/TodoInput";
+import DarkModeSwitch from "@/components/todo/DarkModeSwitch";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
@@ -20,6 +21,7 @@ export default function Home() {
   const [isCompleteTodoList, setIsCompleteTodoList] = useState(false);
   const [isIncompleteTodoList, setIsIncompleteTodoList] = useState(false);
   const [isShowTodoInput, setIsShowTodoInput] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [content, setContent] = useState("");
   const [todos, setTodos] = useState<Todo[]>([]);
   const incompleteTodos = todos.filter((todo) => todo.is_completed === false);
@@ -104,18 +106,32 @@ export default function Home() {
   if (isLoading) return <div />;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg mx-auto my-auto">
+    <div
+      className={`min-h-screen flex items-center justify-center p-4 ${
+        isDarkMode && "bg-gray-950"
+      }`}
+    >
+      <Card
+        className={`w-full max-w-lg mx-auto my-auto ${
+          isDarkMode && "bg-gray-900 border-gray-800"
+        }`}
+      >
         <CardHeader>
           <Header currentUserName={currentUserName} onSignout={signout} />
-          <TodoSwitch
-            isAllTodoList={isAllTodoList}
-            isIncompleteTodoList={isIncompleteTodoList}
-            isCompleteTodoList={isCompleteTodoList}
-            onShowAllTodos={handleShowAllTodos}
-            onShowIncompleteTodos={handleShowIncompleteTodos}
-            onShowCompleteTodos={handleShowCompleteTodos}
-          />
+          <div className="flex items-center justify-between">
+            <DarkModeSwitch
+              isDarkMode={isDarkMode}
+              setIsDarkMode={setIsDarkMode}
+            />
+            <TodoSwitch
+              isAllTodoList={isAllTodoList}
+              isIncompleteTodoList={isIncompleteTodoList}
+              isCompleteTodoList={isCompleteTodoList}
+              onShowAllTodos={handleShowAllTodos}
+              onShowIncompleteTodos={handleShowIncompleteTodos}
+              onShowCompleteTodos={handleShowCompleteTodos}
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <TodoList
