@@ -12,7 +12,7 @@ export default function DarkModeSwitch({
   setIsDarkMode,
 }: DarkModeSwitchProps) {
   return (
-    <div className="flex items-center gap-5 relative">
+    <div className="flex items-center relative">
       <Switch
         id="dark-mode"
         defaultChecked={isDarkMode}
