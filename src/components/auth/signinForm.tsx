@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "react-router-dom";
 
 interface SignupFormProps {
   errors: { [key: string]: string };
@@ -19,7 +20,15 @@ export default function SigninForm({
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>ログイン</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>ログイン</CardTitle>
+          <span className="text-sm">
+            ユーザー登録は
+            <Link to="/signup" className="border-b border-black">
+              こちら
+            </Link>
+          </span>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">

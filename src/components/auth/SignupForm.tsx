@@ -2,6 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "react-router-dom";
+import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff } from "react-icons/io";
 
 interface SignupFormProps {
   errors: { [key: string]: string };
@@ -31,7 +34,15 @@ export default function SignupForm({
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>ユーザー登録</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>ユーザー登録</CardTitle>
+          <span className="text-sm">
+            登録済みの方は
+            <Link to="/signin" className="border-b border-black">
+              こちら
+            </Link>
+          </span>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -63,7 +74,7 @@ export default function SignupForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">パスワード</Label>
-            <div className="relative">
+            <div className="relative flex items-center">
               <Input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -71,14 +82,18 @@ export default function SignupForm({
                 onChange={(e) => setPassword(e.target.value)}
                 className="focus:border-none"
               />
-              <Button
-                type="button"
-                variant="outline"
-                className="absolute right-0 top-0 text-sm rounded-l-none w-20"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "非表示" : "表示"}
-              </Button>
+              {!showPassword && (
+                <IoMdEye
+                  className="absolute right-5 text-2xl text-gray-300"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+              {showPassword && (
+                <IoMdEyeOff
+                  className="absolute right-5 text-2xl text-gray-600"
+                  onClick={() => setShowPassword(false)}
+                />
+              )}
             </div>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password}</p>
@@ -86,7 +101,7 @@ export default function SignupForm({
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">パスワード(確認用)</Label>
-            <div className="relative">
+            <div className="relative flex items-center">
               <Input
                 type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
@@ -94,14 +109,18 @@ export default function SignupForm({
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="focus:border-none"
               />
-              <Button
-                type="button"
-                variant="outline"
-                className="absolute right-0 top-0 text-sm rounded-l-none w-20"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? "非表示" : "表示"}
-              </Button>
+              {!showConfirmPassword && (
+                <IoMdEye
+                  className="absolute right-5 text-2xl text-gray-300"
+                  onClick={() => setShowConfirmPassword(true)}
+                />
+              )}
+              {showConfirmPassword && (
+                <IoMdEyeOff
+                  className="absolute right-5 text-2xl text-gray-600"
+                  onClick={() => setShowConfirmPassword(false)}
+                />
+              )}
             </div>
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
