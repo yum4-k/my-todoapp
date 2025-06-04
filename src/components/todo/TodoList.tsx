@@ -8,6 +8,7 @@ import type { Todo } from "@/types/todo";
 
 interface AllTodoListProps {
   todos: Todo[];
+  isDarkMode: boolean;
   onDelete: (id: number) => void;
   onUpdate: (
     id: number,
@@ -17,6 +18,7 @@ interface AllTodoListProps {
 
 export default function AllTodoList({
   todos,
+  isDarkMode,
   onDelete,
   onUpdate,
 }: AllTodoListProps) {
@@ -25,6 +27,7 @@ export default function AllTodoList({
   >({});
   const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editedContent, setEditedContent] = useState<string>("");
+  const [isComposing, setIsComposing] = useState(false);
 
   const toggleContentWrap = (id: number) => {
     setContentWrapState((prevState) => ({
@@ -45,12 +48,23 @@ export default function AllTodoList({
     setEditingTodoId(null);
   };
 
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    if (e.key === "Enter" && !isComposing) {
+      handleEditEnd(id);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {todos.map((todo) => (
         <div
           key={todo.id}
-          className="flex items-center justify-between bg-gray-100 px-4 py-2 rounded shadow"
+          className={`flex items-center justify-between px-4 py-2 rounded shadow ${
+            isDarkMode ? "bg-gray-700 text-white" : "bg-gray-100"
+          }`}
         >
           <div>
             <Checkbox
@@ -75,11 +89,10 @@ export default function AllTodoList({
                 value={editedContent}
                 onChange={(e) => setEditedContent(e.target.value)}
                 onBlur={() => handleEditEnd(todo.id)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleEditEnd(todo.id);
-                }}
-                className="text-lg mr-4 border-none 
-                focus-visible:ring-muted shadow-none"
+                onKeyDown={(e) => handleKeyDown(e, todo.id)}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={() => setIsComposing(false)}
+                className="text-lg mr-4 focus-visible:ring-muted border-none shadow-none focus-visible:ring-0"
               />
             ) : (
               <p className="text-lg mr-4">{todo.content}</p>

@@ -12,16 +12,19 @@ export default function DarkModeSwitch({
   setIsDarkMode,
 }: DarkModeSwitchProps) {
   return (
-    <div className="flex items-center gap-5 ">
+    <div className="flex items-center gap-5 relative">
       <Switch
         id="dark-mode"
         defaultChecked={isDarkMode}
         onCheckedChange={() => setIsDarkMode(!isDarkMode)}
-        className="scale-150 ml-3"
+        className="scale-200 ml-4 h-[18px]"
       />
-      <Label htmlFor="dark-mode" className="text-xl">
-        {isDarkMode ? <MdDarkMode /> : <MdLightMode />}
-      </Label>
+      {!isDarkMode && (<Label htmlFor="dark-mode" className="text-lg absolute left-9.5">
+        <MdDarkMode />
+      </Label>)}
+      {isDarkMode && (<Label htmlFor="dark-mode" className="text-lg absolute left-2">
+        <MdLightMode className="text-white"/>
+      </Label>)}
     </div>
   );
 }

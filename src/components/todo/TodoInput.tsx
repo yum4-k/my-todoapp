@@ -1,19 +1,23 @@
 import { IoIosAdd } from "react-icons/io";
 import { Input } from "@/components/ui/input";
 
-export default function TodoInput({
-  isShowTodoInput,
-  content,
-  setContent,
-  onCreateTodo,
-  toggleInput,
-}: {
+interface TodoInputProps {
+  isDarkMode: boolean;
   isShowTodoInput: boolean;
   content: string;
   setContent: (value: string) => void;
   onCreateTodo: () => void;
   toggleInput: () => void;
-}) {
+}
+
+export default function TodoInput({
+  isDarkMode,
+  isShowTodoInput,
+  content,
+  setContent,
+  onCreateTodo,
+  toggleInput,
+}: TodoInputProps) {
   return (
     <>
       {!isShowTodoInput && (
@@ -28,7 +32,7 @@ export default function TodoInput({
         <div className="flex items-center justify-between my-4">
           <Input
             type="text"
-            className="wx-auto"
+            className={`wx-auto ${isDarkMode && "bg-gray-700 border-gray-600 text-white"}`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />

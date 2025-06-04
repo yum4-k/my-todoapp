@@ -48,8 +48,10 @@ export default function Home() {
   }, [userId]);
 
   const createTodo = async () => {
-    if (!userId) return;
-    if (content === "") return;
+    if (!userId || content === "") {
+      setIsShowTodoInput(false);
+      return;
+    }
     const newTodo = await todoRepository.create(userId, content);
     setTodos((prevTodos) => [...prevTodos, newTodo]);
     setIsShowTodoInput(false);
@@ -117,13 +119,18 @@ export default function Home() {
         }`}
       >
         <CardHeader>
-          <Header currentUserName={currentUserName} onSignout={signout} />
+          <Header
+            currentUserName={currentUserName}
+            onSignout={signout}
+            isDarkMode={isDarkMode}
+          />
           <div className="flex items-center justify-between">
             <DarkModeSwitch
               isDarkMode={isDarkMode}
               setIsDarkMode={setIsDarkMode}
             />
             <TodoSwitch
+              isDarkMode={isDarkMode}
               isAllTodoList={isAllTodoList}
               isIncompleteTodoList={isIncompleteTodoList}
               isCompleteTodoList={isCompleteTodoList}
@@ -142,10 +149,12 @@ export default function Home() {
                 ? incompleteTodos
                 : completeTodos
             }
+            isDarkMode={isDarkMode}
             onDelete={deleteTodo}
             onUpdate={updateTodo}
           />
           <TodoInput
+            isDarkMode={isDarkMode}
             isShowTodoInput={isShowTodoInput}
             content={content}
             setContent={setContent}
