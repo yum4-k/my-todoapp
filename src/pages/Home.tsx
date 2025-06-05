@@ -7,10 +7,8 @@ import { useCurrentUserStore } from "@/modules/auth/auth.store";
 import { todoRepository } from "@/modules/todo/todo.repository";
 import type { Todo } from "@/types/todo";
 import Header from "@/components/todo/Header";
-import TodoSwitch from "@/components/todo/TodoSwitch";
 import TodoList from "@/components/todo/TodoList";
 import TodoInput from "@/components/todo/TodoInput";
-import DarkModeSwitch from "@/components/todo/DarkModeSwitch";
 
 export default function Home() {
   const currentUserStore = useCurrentUserStore();
@@ -123,22 +121,14 @@ export default function Home() {
             currentUserName={currentUserName}
             onSignout={signout}
             isDarkMode={isDarkMode}
+            setIsDarkMode={setIsDarkMode}
+            isAllTodoList={isAllTodoList}
+            isIncompleteTodoList={isIncompleteTodoList}
+            isCompleteTodoList={isCompleteTodoList}
+            handleShowAllTodos={handleShowAllTodos}
+            handleShowIncompleteTodos={handleShowIncompleteTodos}
+            handleShowCompleteTodos={handleShowCompleteTodos}
           />
-          <div className="flex items-center justify-between">
-            <DarkModeSwitch
-              isDarkMode={isDarkMode}
-              setIsDarkMode={setIsDarkMode}
-            />
-            <TodoSwitch
-              isDarkMode={isDarkMode}
-              isAllTodoList={isAllTodoList}
-              isIncompleteTodoList={isIncompleteTodoList}
-              isCompleteTodoList={isCompleteTodoList}
-              onShowAllTodos={handleShowAllTodos}
-              onShowIncompleteTodos={handleShowIncompleteTodos}
-              onShowCompleteTodos={handleShowCompleteTodos}
-            />
-          </div>
         </CardHeader>
         <CardContent>
           <TodoList
