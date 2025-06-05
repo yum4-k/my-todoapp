@@ -112,7 +112,7 @@ export default function Home() {
       }`}
     >
       <Card
-        className={`w-full max-w-lg mx-auto my-auto ${
+        className={`w-full max-w-lg mx-auto my-auto overflow-hidden ${
           isDarkMode && "bg-gray-900 border-gray-800"
         }`}
       >
