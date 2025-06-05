@@ -1,5 +1,5 @@
 ## My Portfolio (React v19)
-React/TypeScriptで制作した個人ポートフォリオサイトです。  
+React/TypeScript/Viteで制作した個人ポートフォリオサイトです。  
 認証、DB、バリデーション、CRUD機能、  
 ダークモード機能が実装された、自作TODOアプリです。  
 
