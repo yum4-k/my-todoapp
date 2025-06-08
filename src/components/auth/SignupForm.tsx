@@ -84,6 +84,7 @@ export default function SignupForm({
               />
               {!showPassword && (
                 <IoMdEye
+                  data-testid="show-password-icon"
                   className="absolute right-5 text-2xl text-gray-300"
                   onClick={() => setShowPassword(true)}
                 />
