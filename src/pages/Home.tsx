@@ -103,7 +103,8 @@ export default function Home() {
     return <Navigate replace to="/signin" />;
   }
 
-  if (isLoading) return <div />;
+  if (isLoading)
+    return <div className="flex items-center justify-center">loading...</div>;
 
   return (
     <div
