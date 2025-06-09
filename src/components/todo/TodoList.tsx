@@ -68,6 +68,7 @@ export default function AllTodoList({
         >
           <div>
             <Checkbox
+              data-testid="todo-checkbox"
               className="bg-white mr-4"
               checked={todo.is_completed}
               onCheckedChange={() => {
@@ -100,9 +101,11 @@ export default function AllTodoList({
           </div>
           <div className="flex items-center justify-between cursor-pointer gap-2">
             <BiSolidPencil
+              data-testid="update-icon"
               onClick={() => handleEditStart(todo.id, todo.content)}
             />
             <IoIosClose
+              data-testid="delete-icon"
               className="text-3xl"
               onClick={() => onDelete(todo.id)}
             />

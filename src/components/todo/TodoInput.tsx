@@ -32,13 +32,19 @@ export default function TodoInput({
         <div className="flex items-center justify-between my-4">
           <Input
             type="text"
-            className={`wx-auto ${isDarkMode && "bg-gray-700 border-gray-600 text-white"}`}
+            className={`wx-auto ${
+              isDarkMode && "bg-gray-700 border-gray-600 text-white"
+            }`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
           <IoIosAdd
+            data-testid="todo-create-icon"
             className="text-4xl text-gray-300 cursor-pointer shadow ml-4"
-            onClick={onCreateTodo}
+            onClick={() => {
+              if (content.trim() === "") return;
+              onCreateTodo();
+            }}
           />
         </div>
       )}
