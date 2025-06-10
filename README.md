@@ -21,6 +21,7 @@ React/TypeScript/Viteで制作した個人ポートフォリオサイトです�
 - DB: supabase
 - バリデーション: zod
 - 状態管理: jotai
+- テスト: vitest
 - デプロイ: Vercel
 - その他: ReactDOM / react Icon など
 
